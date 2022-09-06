@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">GreenDao_example</string>
+    <string name="ui_en_tx0002">Password</string>
+    <string name="ui_en_tx0001">Email</string>
+    <string name="ui_en_tx0003">Login</string>
+    <string name="ui_en_tx0004">I didn\'t have an account</string>
+    <string name="ui_en_tx0005"><![CDATA[Terms & Condition]]></string>
+</resources>
