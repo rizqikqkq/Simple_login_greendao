@@ -34,9 +34,11 @@ public class ms_userLoginHistory {
     @Id(autoincrement = true)
     private Long id;
 
-    @Id
     @NotNull
     private String email;
+
+    @NotNull
+    private String action_id;
 
     @NotNull
     private String uid;
@@ -51,13 +53,12 @@ public class ms_userLoginHistory {
     public ms_userLoginHistory() {
     }
 
-    public ms_userLoginHistory(Long id, String email) {
+    public ms_userLoginHistory(Long id) {
         this.id = id;
-        this.email = email;
     }
 
     @Generated
-    public ms_userLoginHistory(String data_sync_status, String data_sync_date, String update_at, String create_at, String create_by, String update_by, Long id, String email, String uid, String mac) {
+    public ms_userLoginHistory(String data_sync_status, String data_sync_date, String update_at, String create_at, String create_by, String update_by, Long id, String email, String action_id, String uid, String mac) {
         this.data_sync_status = data_sync_status;
         this.data_sync_date = data_sync_date;
         this.update_at = update_at;
@@ -66,6 +67,7 @@ public class ms_userLoginHistory {
         this.update_by = update_by;
         this.id = id;
         this.email = email;
+        this.action_id = action_id;
         this.uid = uid;
         this.mac = mac;
     }
@@ -146,6 +148,16 @@ public class ms_userLoginHistory {
     /** Not-null value; ensure this value is available before it is saved to the database. */
     public void setEmail(@NotNull String email) {
         this.email = email;
+    }
+
+    @NotNull
+    public String getAction_id() {
+        return action_id;
+    }
+
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setAction_id(@NotNull String action_id) {
+        this.action_id = action_id;
     }
 
     @NotNull

@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "MS_USER".
 */
-public class ms_userDao extends AbstractDao<ms_user, Void> {
+public class ms_userDao extends AbstractDao<ms_user, Long> {
 
     public static final String TABLENAME = "MS_USER";
 
@@ -30,7 +30,7 @@ public class ms_userDao extends AbstractDao<ms_user, Void> {
         public final static Property Update_by = new Property(5, String.class, "update_by", false, "UPDATE_BY");
         public final static Property Id = new Property(6, Long.class, "id", true, "_id");
         public final static Property Uid = new Property(7, String.class, "uid", false, "UID");
-        public final static Property Email = new Property(8, String.class, "email", true, "EMAIL");
+        public final static Property Email = new Property(8, String.class, "email", false, "EMAIL");
         public final static Property Password = new Property(9, String.class, "password", false, "PASSWORD");
         public final static Property Name_first = new Property(10, String.class, "name_first", false, "NAME_FIRST");
         public final static Property Name_last = new Property(11, String.class, "name_last", false, "NAME_LAST");
@@ -57,7 +57,7 @@ public class ms_userDao extends AbstractDao<ms_user, Void> {
                 "\"UPDATE_BY\" TEXT NOT NULL ," + // 5: update_by
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 6: id
                 "\"UID\" TEXT NOT NULL ," + // 7: uid
-                "\"EMAIL\" TEXT PRIMARY KEY NOT NULL ," + // 8: email
+                "\"EMAIL\" TEXT NOT NULL ," + // 8: email
                 "\"PASSWORD\" TEXT NOT NULL ," + // 9: password
                 "\"NAME_FIRST\" TEXT NOT NULL ," + // 10: name_first
                 "\"NAME_LAST\" TEXT NOT NULL );"); // 11: name_last
@@ -112,8 +112,8 @@ public class ms_userDao extends AbstractDao<ms_user, Void> {
     }
 
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6);
     }    
 
     @Override
@@ -152,20 +152,23 @@ public class ms_userDao extends AbstractDao<ms_user, Void> {
      }
     
     @Override
-    protected final Void updateKeyAfterInsert(ms_user entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected final Long updateKeyAfterInsert(ms_user entity, long rowId) {
+        entity.setId(rowId);
+        return rowId;
     }
     
     @Override
-    public Void getKey(ms_user entity) {
-        return null;
+    public Long getKey(ms_user entity) {
+        if(entity != null) {
+            return entity.getId();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean hasKey(ms_user entity) {
-        // TODO
-        return false;
+        return entity.getId() != null;
     }
 
     @Override

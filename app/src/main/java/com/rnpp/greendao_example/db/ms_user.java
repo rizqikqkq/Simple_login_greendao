@@ -37,7 +37,6 @@ public class ms_user {
     @NotNull
     private String uid;
 
-    @Id
     @NotNull
     private String email;
 
@@ -57,9 +56,8 @@ public class ms_user {
     public ms_user() {
     }
 
-    public ms_user(Long id, String email) {
+    public ms_user(Long id) {
         this.id = id;
-        this.email = email;
     }
 
     @Generated

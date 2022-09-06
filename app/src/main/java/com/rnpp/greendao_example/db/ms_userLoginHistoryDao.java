@@ -13,7 +13,7 @@ import org.greenrobot.greendao.database.DatabaseStatement;
 /** 
  * DAO for table "MS_USER_LOGIN_HISTORY".
 */
-public class ms_userLoginHistoryDao extends AbstractDao<ms_userLoginHistory, Void> {
+public class ms_userLoginHistoryDao extends AbstractDao<ms_userLoginHistory, Long> {
 
     public static final String TABLENAME = "MS_USER_LOGIN_HISTORY";
 
@@ -29,9 +29,10 @@ public class ms_userLoginHistoryDao extends AbstractDao<ms_userLoginHistory, Voi
         public final static Property Create_by = new Property(4, String.class, "create_by", false, "CREATE_BY");
         public final static Property Update_by = new Property(5, String.class, "update_by", false, "UPDATE_BY");
         public final static Property Id = new Property(6, Long.class, "id", true, "_id");
-        public final static Property Email = new Property(7, String.class, "email", true, "EMAIL");
-        public final static Property Uid = new Property(8, String.class, "uid", false, "UID");
-        public final static Property Mac = new Property(9, String.class, "mac", false, "MAC");
+        public final static Property Email = new Property(7, String.class, "email", false, "EMAIL");
+        public final static Property Action_id = new Property(8, String.class, "action_id", false, "ACTION_ID");
+        public final static Property Uid = new Property(9, String.class, "uid", false, "UID");
+        public final static Property Mac = new Property(10, String.class, "mac", false, "MAC");
     }
 
 
@@ -54,9 +55,10 @@ public class ms_userLoginHistoryDao extends AbstractDao<ms_userLoginHistory, Voi
                 "\"CREATE_BY\" TEXT NOT NULL ," + // 4: create_by
                 "\"UPDATE_BY\" TEXT NOT NULL ," + // 5: update_by
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 6: id
-                "\"EMAIL\" TEXT PRIMARY KEY NOT NULL ," + // 7: email
-                "\"UID\" TEXT NOT NULL ," + // 8: uid
-                "\"MAC\" TEXT NOT NULL );"); // 9: mac
+                "\"EMAIL\" TEXT NOT NULL ," + // 7: email
+                "\"ACTION_ID\" TEXT NOT NULL ," + // 8: action_id
+                "\"UID\" TEXT NOT NULL ," + // 9: uid
+                "\"MAC\" TEXT NOT NULL );"); // 10: mac
     }
 
     /** Drops the underlying database table. */
@@ -80,8 +82,9 @@ public class ms_userLoginHistoryDao extends AbstractDao<ms_userLoginHistory, Voi
             stmt.bindLong(7, id);
         }
         stmt.bindString(8, entity.getEmail());
-        stmt.bindString(9, entity.getUid());
-        stmt.bindString(10, entity.getMac());
+        stmt.bindString(9, entity.getAction_id());
+        stmt.bindString(10, entity.getUid());
+        stmt.bindString(11, entity.getMac());
     }
 
     @Override
@@ -99,13 +102,14 @@ public class ms_userLoginHistoryDao extends AbstractDao<ms_userLoginHistory, Voi
             stmt.bindLong(7, id);
         }
         stmt.bindString(8, entity.getEmail());
-        stmt.bindString(9, entity.getUid());
-        stmt.bindString(10, entity.getMac());
+        stmt.bindString(9, entity.getAction_id());
+        stmt.bindString(10, entity.getUid());
+        stmt.bindString(11, entity.getMac());
     }
 
     @Override
-    public Void readKey(Cursor cursor, int offset) {
-        return null;
+    public Long readKey(Cursor cursor, int offset) {
+        return cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6);
     }    
 
     @Override
@@ -119,8 +123,9 @@ public class ms_userLoginHistoryDao extends AbstractDao<ms_userLoginHistory, Voi
             cursor.getString(offset + 5), // update_by
             cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6), // id
             cursor.getString(offset + 7), // email
-            cursor.getString(offset + 8), // uid
-            cursor.getString(offset + 9) // mac
+            cursor.getString(offset + 8), // action_id
+            cursor.getString(offset + 9), // uid
+            cursor.getString(offset + 10) // mac
         );
         return entity;
     }
@@ -135,25 +140,29 @@ public class ms_userLoginHistoryDao extends AbstractDao<ms_userLoginHistory, Voi
         entity.setUpdate_by(cursor.getString(offset + 5));
         entity.setId(cursor.isNull(offset + 6) ? null : cursor.getLong(offset + 6));
         entity.setEmail(cursor.getString(offset + 7));
-        entity.setUid(cursor.getString(offset + 8));
-        entity.setMac(cursor.getString(offset + 9));
+        entity.setAction_id(cursor.getString(offset + 8));
+        entity.setUid(cursor.getString(offset + 9));
+        entity.setMac(cursor.getString(offset + 10));
      }
     
     @Override
-    protected final Void updateKeyAfterInsert(ms_userLoginHistory entity, long rowId) {
-        // Unsupported or missing PK type
-        return null;
+    protected final Long updateKeyAfterInsert(ms_userLoginHistory entity, long rowId) {
+        entity.setId(rowId);
+        return rowId;
     }
     
     @Override
-    public Void getKey(ms_userLoginHistory entity) {
-        return null;
+    public Long getKey(ms_userLoginHistory entity) {
+        if(entity != null) {
+            return entity.getId();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public boolean hasKey(ms_userLoginHistory entity) {
-        // TODO
-        return false;
+        return entity.getId() != null;
     }
 
     @Override

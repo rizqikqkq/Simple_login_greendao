@@ -68,9 +68,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun doTryLoginUser() {
-        if(UA.hasText(mEtEmail, "Harap masukkan email!") &&
-                UA.hasText(mEtPassword, "Harap masukkan password!")){
-            DoLoginUser(mEtEmail.text.toString(), mEtPassword.text.toString()).execute()
+        when{
+            !UA.hasText(mEtEmail, "Harap masukkan email!") -> {}
+            !UA.hasText(mEtPassword, "Harap masukkan password!")-> {}
+            else -> {
+                DoLoginUser(mEtEmail.text.toString(), mEtPassword.text.toString()).execute()
+            }
         }
     }
 

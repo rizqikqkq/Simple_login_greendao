@@ -93,9 +93,11 @@
             android:id="@+id/bt_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:foregroundTint="@color/amber_200"
-            android:backgroundTint="@color/teal_300"
+            android:background="@drawable/custom_rounded_border_2"
+            android:foreground="?attr/selectableItemBackgroundBorderless"
+            android:backgroundTint="@color/colorAccent"
             android:text="@string/ui_en_tx0003"
+            android:textColor="@color/white"
             android:textSize="24sp" />
     </LinearLayout>
     <TextView

@@ -38,13 +38,50 @@ class local_ms_user {
             msUser.name_first = name_first
             msUser.name_last = name_last
             msUser.uid = uid
-            
+
 
             daoSession.ms_userDao.insert(msUser)
             bIsSuccess = "1"
 
         } catch (ex: Exception) {
             bIsSuccess = "DAO_do_regist_user: $ex"
+        }
+        return bIsSuccess
+    }
+
+    @Throws(SQLException::class)
+    fun DAO_do_check_user(
+        context: Context,
+        email: String
+    ): String {
+        mTempMsUser.clear()
+        mMsUser.clear()
+
+        var bIsSuccess = ""
+        try {
+            val daoSession : DaoSession = DaoHelper.initSession(context)
+
+            val db = DaoHelper.initDatabase(context)
+            ms_userDao.createTable(db, true)
+
+            val tableDao = daoSession.ms_userDao
+
+            mTempMsUser.addAll(tableDao.loadAll())
+            //checking email and password
+            for (_iN in mTempMsUser.indices){
+                if (mTempMsUser[_iN].email.equals(email)){
+                    //get intended user data
+                    val datanum = HashMap<String, String>()
+                    datanum["uid"] = mTempMsUser[_iN].uid
+                    datanum["email"] = mTempMsUser[_iN].email
+
+                    mMsUser.add(datanum)
+                }
+            }
+
+            bIsSuccess = if (mMsUser.size > 0) "1" else "0"
+        } catch (ex: Exception) {
+            bIsSuccess = "DAO_do_login_user:$ex"
         }
         return bIsSuccess
     }

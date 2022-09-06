@@ -1,6 +1,7 @@
 package com.rnpp.greendao_example.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -66,19 +67,18 @@ class RegisterActivity : AppCompatActivity() {
         mEtRegisterPasswordConfirm.error = null
 
         when{
-            !UA.hasText(mEtRegisterFirstName, "Fill First Name") &&
-                    !UA.hasText(mEtRegisterLastName, "Fill last Name") &&
-                    !UA.hasText(mEtRegisterEmail, "Fill Email") &&
-                    !UA.hasText(mEtRegisterPassword, "Fill Password") &&
-                    !UA.hasText(mEtRegisterPasswordConfirm, "Retype the password") -> {
-                Log.i("info","Empty EditText Field")
-            }
+            !UA.hasText(mEtRegisterFirstName, "Fill First Name") -> {}
+            !UA.hasText(mEtRegisterLastName, "Fill last Name") -> {}
+            !UA.hasText(mEtRegisterEmail, "Fill Email") -> {}
+            !UA.hasText(mEtRegisterPassword, "Fill Password") -> {}
+            !UA.hasText(mEtRegisterPasswordConfirm, "Retype the password") -> {}
             mEtRegisterPassword.text.toString() != mEtRegisterPasswordConfirm.text.toString() -> {
                 mEtRegisterPasswordConfirm.error = "Password does not match!"
             }
             !mCbRegisterAgree.isChecked -> {
                 UA.showError("Attention!","Please check the agreement to use the app.", oContext)
             }
+
             else -> {
                 coVFrstName = mEtRegisterFirstName.text.toString()
                 coVLastName = mEtRegisterLastName.text.toString()
@@ -96,7 +96,10 @@ class RegisterActivity : AppCompatActivity() {
             mLoDialog.hideDialog()
             when (result){
                 "1" -> {
-
+                    UA.showError("Success.", "Please login using the registered account to use the app.", oContext)
+                    val accountsIntent = Intent(this@RegisterActivity, LoginActivity::class.java)
+                    startActivity(accountsIntent)
+                    finish()
                 }
                 "0" -> {
                     UA.doBread(
@@ -123,18 +126,21 @@ class RegisterActivity : AppCompatActivity() {
             )
 
             return try{
-                ocLoMsUser.DAO_do_regist_user(
-                    oContext,
-                    _uid,
-                    UA.getDate(null,"datetime"),
-                    _uid,
-                    _uid,
-                    coVMail,
-                    coVPass,
-                    coVFrstName,
-                    coVLastName
-                )
-
+                if (ocLoMsUser.DAO_do_check_user(oContext, coVMail) != "1"){
+                    ocLoMsUser.DAO_do_regist_user(
+                        oContext,
+                        _uid,
+                        UA.getDate(null,"datetime"),
+                        _uid,
+                        _uid,
+                        coVMail,
+                        coVPass,
+                        coVFrstName,
+                        coVLastName
+                    )
+                }else {
+                    "This email is already associate with another user. "
+                }
             }catch (e: Exception){
                 "$e"
             }

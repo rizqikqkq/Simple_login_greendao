@@ -42,7 +42,7 @@ public class MyGenerator {
         addDefaultEnt(params);
         params.addIdProperty().primaryKey().autoincrement();
         params.addStringProperty("uid").notNull();
-        params.addStringProperty("email").primaryKey().notNull();
+        params.addStringProperty("email").notNull();
         params.addStringProperty("password").notNull();
         params.addStringProperty("name_first").notNull();
         params.addStringProperty("name_last").notNull();
@@ -65,7 +65,8 @@ public class MyGenerator {
         Entity params = schema.addEntity("ms_userLoginHistory");
         addDefaultEnt(params);
         params.addIdProperty().primaryKey().autoincrement();
-        params.addStringProperty("email").primaryKey().notNull();
+        params.addStringProperty("email").notNull();
+        params.addStringProperty("action_id").notNull();
         params.addStringProperty("uid").notNull();
         params.addStringProperty("mac").notNull();
         return params;
